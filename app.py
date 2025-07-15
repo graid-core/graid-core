@@ -1,18 +1,15 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request
 from core_grand import process
 
 app = Flask(__name__)
 
-@app.route("/chat", methods=["POST"])
-def chat():
-    data = request.get_json()
-    user_input = data.get("user_input", "")
+@app.route("/", methods=["GET"])
+def home():
+    return "✅ GRAID LIVE - API არის მზად გამოყენებისთვის"
 
-    if not user_input:
-        return jsonify({"error": "მომხმარებლის შეტყობინება ცარიელია."}), 400
-
+@app.route("/graid", methods=["POST"])
+def handle_input():
+    data = request.json
+    user_input = data.get("message", "")
     response = process(user_input)
-    return jsonify({"response": response})
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
+    return {"response": response}
